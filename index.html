@@ -45,5 +45,14 @@
   <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 
+  <!-- Ζήτα άδεια για ειδοποιήσεις -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+    });
+  </script>
+
 </body>
 </html>
