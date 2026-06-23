@@ -1,15 +1,31 @@
 const db = firebase.database();
 const messagesRef = db.ref("messages");
 
-// 📥 Load messages live
+// 🔔 Ήχος ειδοποίησης
+const ding = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+
+// 📥 Live λήψη μηνυμάτων
 messagesRef.on("child_added", snap => {
   const msg = snap.val();
+
+  // Εμφάνιση στο παράθυρο
   const div = document.createElement("div");
   div.textContent = msg;
   document.getElementById("messages").appendChild(div);
+
+  // 🔔 Ήχος
+  ding.play().catch(() => {});
+
+  // 🪟 Windows Notification
+  if (Notification.permission === "granted") {
+    new Notification("📨 Νέο μήνυμα", {
+      body: msg,
+      icon: "https://cdn-icons-png.flaticon.com/512/561/561127.png"
+    });
+  }
 });
 
-// 📤 Send message
+// 📤 Αποστολή μηνύματος
 document.getElementById("sendBtn").onclick = () => {
   const input = document.getElementById("msgInput");
   const text = input.value.trim();
